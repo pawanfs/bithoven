@@ -20,13 +20,17 @@ async function deleteFileStore() {
     const dataDir = path.join(__dirname, '../data');
     
     if (await fs.pathExists(dataDir)) {
+      console.log(`Data directory found at: ${dataDir}`);
       const files = await fs.readdir(dataDir);
+      console.log(`Found ${files.length} items in the data directory.`);
       
       for (const file of files) {
         const filePath = path.join(dataDir, file);
         if ((await fs.lstat(filePath)).isDirectory()) {
           await fs.remove(filePath);
           console.log(`Deleted directory: ${filePath}`);
+        } else {
+          console.log(`Skipped non-directory item: ${filePath}`);
         }
       }
     } else {
